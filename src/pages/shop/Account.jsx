@@ -16,7 +16,7 @@ import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import useWishlist from "../../hooks/useWishlist";
-
+import IranCityPicker from "../../components/common/IranCityPicker";
 function Account() {
 const {
   user,
@@ -386,16 +386,10 @@ const handlePasswordSubmit = (event) => {
     شهر
   </span>
 
-  <div className="account-input-wrapper">
-    <input
-      type="text"
-      value={city}
-      onChange={(event) =>
-        setCity(event.target.value)
-      }
-      placeholder="مثلاً تهران"
-    />
-  </div>
+  <IranCityPicker
+    value={city}
+    onChange={setCity}
+  />
 </label>
 
 <label className="account-address-field">

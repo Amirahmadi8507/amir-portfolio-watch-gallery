@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import GlassCard from "../../components/common/GlassCard";
 import useCart from "../../hooks/useCart";
 import useAuth from "../../hooks/useAuth";
-
+import IranCityPicker from "../../components/common/IranCityPicker";
 function Checkout() {
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ function Checkout() {
     user,
     isAuthenticated,
   } = useAuth();
-
+const [selectedCity, setSelectedCity] = useState("");
   const {
     cart,
     cartCount,
@@ -248,17 +248,20 @@ function Checkout() {
           <div className="checkout-fields">
 
             <label>
-              شهر
+  شهر
 
-              <input
-                type="text"
-                name="city"
-                value={form.city}
-                onChange={handleChange}
-                placeholder="مثلاً تهران"
-                required
-              />
-            </label>
+  <IranCityPicker
+    value={selectedCity}
+    onChange={setSelectedCity}
+  />
+
+  <input
+    type="hidden"
+    name="city"
+    value={selectedCity}
+    required
+  />
+</label>
 
             <label className="checkout-full">
               آدرس کامل
