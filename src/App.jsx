@@ -16,12 +16,17 @@ import Cart from "./pages/shop/Cart";
 import Wishlist from "./pages/shop/Wishlist";
 import AboutShop from "./pages/shop/AboutShop";
 import ContactShop from "./pages/shop/ContactShop";
+import Auth from "./pages/shop/Auth";
+import Account from "./pages/shop/Account";
+import Orders from "./pages/shop/Orders";
+import OrderDetails from "./pages/shop/OrderDetails";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/shop/Checkout";
 import OrderSuccess from "./pages/shop/OrderSuccess";
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/amir-portfolio-watch-gallery">
       <Routes>
 
         <Route element={<MainLayout />}>
@@ -79,6 +84,16 @@ function App() {
             path="/shop/cart"
             element={<Cart />}
           />
+          <Route path="/shop/auth" element={<Auth />} />
+          <Route path="/shop/account" element={<Account />} />
+          <Route
+  path="/shop/orders"
+  element={<Orders />}
+/>
+<Route
+  path="/shop/orders/:id"
+  element={<OrderDetails />}
+/>
           <Route
   path="/shop/checkout"
   element={<Checkout />}

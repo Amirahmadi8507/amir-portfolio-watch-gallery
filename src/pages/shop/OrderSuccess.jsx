@@ -1,73 +1,128 @@
 import { Link } from "react-router-dom";
 import {
-  Check,
-  ShoppingBag,
   ArrowLeft,
+  CheckCircle2,
+  Package,
+  ShoppingBag,
 } from "lucide-react";
 
-import { motion } from "framer-motion";
-
 function OrderSuccess() {
-  return (
-    <section className="order-success-page">
-      <motion.div
-        className="order-success-card"
-        initial={{
-          opacity: 0,
-          y: 35,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.8,
-        }}
-      >
-        <motion.div
-          className="order-success-icon"
-          initial={{
-            scale: 0.5,
-            opacity: 0,
-          }}
-          animate={{
-            scale: 1,
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 0.2,
-          }}
-        >
-          <Check size={32} />
-        </motion.div>
+  const savedOrders = JSON.parse(
+    localStorage.getItem("am-orders") || "[]"
+  );
 
-        <span>ORDER COMPLETED</span>
+  const order = savedOrders[0];
 
-        <h1>
-          سفارش شما
-          <strong> با موفقیت ثبت شد.</strong>
-        </h1>
+  if (!order) {
+    return (
+      <main className="order-success-page">
+        <div className="order-success-empty">
+          <ShoppingBag size={38} />
 
-        <p>
-          ممنون که AM Watch Gallery را انتخاب کردید.
-          این سفارش در نسخه فعلی پروژه به صورت
-          نمایشی ثبت شده است.
-        </p>
+          <h1>سفارشی پیدا نشد</h1>
 
-        <div className="order-success-actions">
+          <p>
+            هنوز سفارشی برای نمایش وجود ندارد.
+          </p>
+
           <Link to="/shop/products">
-            ادامه خرید
-            <ShoppingBag size={17} />
-          </Link>
-
-          <Link to="/shop">
-            بازگشت به فروشگاه
-            <ArrowLeft size={17} />
+            مشاهده محصولات
           </Link>
         </div>
-      </motion.div>
-    </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="order-success-page">
+      <div className="order-success-shell">
+
+        <section className="order-success-card">
+
+          <div className="order-success-icon">
+            <CheckCircle2 size={48} />
+          </div>
+
+          <span className="order-success-label">
+            ORDER CONFIRMED
+          </span>
+
+          <h1>
+            سفارش شما با موفقیت ثبت شد
+          </h1>
+
+          <p>
+            سفارش شما در سیستم ثبت شده و در حال پردازش است.
+          </p>
+
+          <div className="order-success-number">
+            <span>شماره سفارش</span>
+
+            <strong>
+              {order.id}
+            </strong>
+          </div>
+
+          <div className="order-success-info">
+
+            <div>
+              <Package size={19} />
+
+              <span>تعداد محصولات</span>
+
+              <strong>
+                {order.itemsCount.toLocaleString("fa-IR")}
+              </strong>
+            </div>
+
+            <div>
+              <ShoppingBag size={19} />
+
+              <span>وضعیت</span>
+
+              <strong>
+                {order.status}
+              </strong>
+            </div>
+
+            <div>
+              <CheckCircle2 size={19} />
+
+              <span>مبلغ نهایی</span>
+
+              <strong>
+                {order.total.toLocaleString("fa-IR")}
+                {" "}
+                تومان
+              </strong>
+            </div>
+
+          </div>
+
+          <div className="order-success-actions">
+
+            <Link
+              to={`/shop/orders/${order.id}`}
+              className="order-success-primary"
+            >
+              مشاهده جزئیات سفارش
+
+              <ArrowLeft size={18} />
+            </Link>
+
+            <Link
+              to="/shop/products"
+              className="order-success-secondary"
+            >
+              ادامه خرید
+            </Link>
+
+          </div>
+
+        </section>
+
+      </div>
+    </main>
   );
 }
 

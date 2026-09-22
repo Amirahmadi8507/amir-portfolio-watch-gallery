@@ -7,8 +7,9 @@ import {
 
 import { useCart } from "../../hooks/useCart";
 import useWishlist from "../../hooks/useWishlist";
-
+import useAuth from "../../hooks/useAuth";
 function ShopHeader() {
+  const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const { wishlist } = useWishlist();
 
@@ -32,6 +33,38 @@ function ShopHeader() {
       </nav>
 
       <div className="shop-header-actions">
+        {user ? (
+  <div className="shop-user">
+  <Link
+    to="/shop/account"
+    className="shop-user-profile"
+    aria-label="حساب کاربری"
+  >
+    <div className="shop-user-avatar">
+      {user.name?.charAt(0)}
+    </div>
+
+    <span className="shop-user-name">
+      {user.name}
+    </span>
+  </Link>
+
+  <button
+    type="button"
+    className="shop-logout-button"
+    onClick={logout}
+  >
+    خروج
+  </button>
+</div>
+) : (
+  <Link
+    to="/shop/auth"
+    className="shop-login-button"
+  >
+    ورود
+  </Link>
+)}
         <Link
           to="/shop/search"
           className="shop-header-icon"

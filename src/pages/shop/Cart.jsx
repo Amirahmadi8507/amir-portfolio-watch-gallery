@@ -9,8 +9,9 @@ import {
 
 import GlassCard from "../../components/common/GlassCard";
 import { useCart } from "../../hooks/useCart";
-
+import useAuth from "../../hooks/useAuth";
 function Cart() {
+  const { isAuthenticated } = useAuth();
   const {
     cart,
     cartCount,
@@ -188,8 +189,8 @@ function Cart() {
             </strong>
           </div>
 
-          <Link
-  to="/shop/checkout"
+<Link
+  to={isAuthenticated ? "/shop/checkout" : "/shop/auth"}
   className="checkout-button"
 >
   ادامه و ثبت سفارش
