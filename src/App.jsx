@@ -23,7 +23,14 @@ import OrderDetails from "./pages/shop/OrderDetails";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/shop/Checkout";
 import OrderSuccess from "./pages/shop/OrderSuccess";
-
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminProducts from "./pages/admin/AdminProducts";
+import ProductForm from "./pages/admin/ProductForm";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminMessages from "./pages/admin/AdminMessages";
+import AdminSettings from "./pages/admin/AdminSettings";
 function App() {
   return (
     <BrowserRouter basename="/amir-portfolio-watch-gallery">
@@ -117,7 +124,44 @@ function App() {
             path="/shop/contact"
             element={<ContactShop />}
           />
+ <Route
+  path="/admin"
+  element={<AdminLayout />}
+>
+  <Route
+    index
+    element={<AdminDashboard />}
+  />
 
+  <Route
+    path="products"
+    element={<AdminProducts />}
+  />
+</Route>
+<Route
+  path="/admin/products/new"
+  element={<ProductForm />}
+/>
+<Route
+  path="/admin/products/edit/:id"
+  element={<ProductForm />}
+/>
+<Route
+  path="/admin/orders"
+  element={<AdminOrders />}
+/>
+<Route
+  path="/admin/users"
+  element={<AdminUsers />}
+/>
+<Route
+  path="/admin/messages"
+  element={<AdminMessages />}
+/>
+<Route
+  path="/admin/settings"
+  element={<AdminSettings />}
+/>
         </Route>
 <Route
   path="*"

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   Mail,
   MapPin,
@@ -16,18 +16,61 @@ import GlassCard from "../components/common/GlassCard";
 import SectionTitle from "../components/common/SectionTitle";
 
 function Contact() {
+    const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
   const [formStatus, setFormStatus] = useState("idle");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    setFormStatus("success");
+    try {
+      const messages = JSON.parse(
+        localStorage.getItem("am-messages") || "[]"
+      );
 
-    event.currentTarget.reset();
+      const newMessage = {
+        id: Date.now(),
+        name: form.name.trim(),
+        email: form.email.trim(),
+        subject: form.subject.trim(),
+        message: form.message.trim(),
+        date: new Date().toLocaleDateString("fa-IR"),
+        time: new Date().toLocaleTimeString("fa-IR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
 
-    setTimeout(() => {
-      setFormStatus("idle");
-    }, 4000);
+      localStorage.setItem(
+        "am-messages",
+        JSON.stringify([...messages, newMessage])
+      );
+
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+
+      setFormStatus("success");
+
+      setTimeout(() => {
+        setFormStatus("idle");
+      }, 4000);
+    } catch (error) {
+      console.error("خطا در ذخیره پیام:", error);
+      setFormStatus("error");
+
+      setTimeout(() => {
+        setFormStatus("idle");
+      }, 4000);
+    }
   };
 
   return (
@@ -252,9 +295,69 @@ function Contact() {
             </div>
 
             <form
-              className="contact-form"
-              onSubmit={handleSubmit}
-            >
+  className="contact-form"
+  onSubmit={(event) => {
+  event.preventDefault();
+
+  try {
+    const savedMessages = JSON.parse(
+      localStorage.getItem("am-messages") || "[]"
+    );
+
+    const newMessage = {
+      id: Date.now(),
+
+      name: form.name.trim(),
+
+      email: form.email.trim(),
+
+      message: form.message.trim(),
+
+      date: new Date().toLocaleDateString("fa-IR"),
+
+      time: new Date().toLocaleTimeString("fa-IR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    localStorage.setItem(
+      "am-messages",
+      JSON.stringify([
+        ...savedMessages,
+        newMessage,
+      ])
+    );
+
+    // پاک کردن فرم
+    setForm({
+      name: "",
+      email: "",
+      message: "",
+    });
+
+    // نمایش پیام موفقیت
+    setFormStatus("success");
+
+    setTimeout(() => {
+      setFormStatus("idle");
+    }, 4000);
+
+  } catch (error) {
+    console.error(
+      "خطا در ذخیره پیام:",
+      error
+    );
+
+    setFormStatus("error");
+
+    setTimeout(() => {
+      setFormStatus("idle");
+    }, 4000);
+  }
+}}
+>
+
 
               {/* Name */}
               <div className="form-group">
@@ -262,13 +365,19 @@ function Contact() {
                   نام و نام خانوادگی
                 </label>
 
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="مثلاً امیر احمدی"
-                  required
-                />
+               <input
+  id="name"
+  type="text"
+  placeholder="نام شما"
+  value={form.name}
+  onChange={(event) =>
+    setForm({
+      ...form,
+      name: event.target.value,
+    })
+  }
+  required
+/>
               </div>
 
               {/* Email */}
@@ -277,13 +386,19 @@ function Contact() {
                   ایمیل
                 </label>
 
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="example@email.com"
-                  required
-                />
+              <input
+  id="email"
+  type="email"
+  placeholder="example@email.com"
+  value={form.email}
+  onChange={(event) =>
+    setForm({
+      ...form,
+      email: event.target.value,
+    })
+  }
+  required
+/>
               </div>
 
               {/* Subject */}
@@ -297,6 +412,13 @@ function Contact() {
                   name="subject"
                   type="text"
                   placeholder="مثلاً طراحی سایت فروشگاهی"
+                  value={form.subject}
+                  onChange={(event) =>
+                    setForm({
+                      ...form,
+                      subject: event.target.value,
+                    })
+                  }
                   required
                 />
               </div>
@@ -307,13 +429,19 @@ function Contact() {
                   توضیحات پروژه
                 </label>
 
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="6"
-                  placeholder="کمی درباره ایده، امکانات و چیزی که می‌خواهید ساخته شود بنویسید..."
-                  required
-                />
+               <textarea
+  id="message"
+  rows="6"
+  placeholder="پیام خود را بنویسید..."
+  value={form.message}
+  onChange={(event) =>
+    setForm({
+      ...form,
+      message: event.target.value,
+    })
+  }
+  required
+/>
               </div>
 
               {/* Submit */}
@@ -340,6 +468,7 @@ function Contact() {
                   </>
                 )}
               </button>
+              
 
               {/* Success Message */}
               {formStatus === "success" && (
@@ -354,10 +483,23 @@ function Contact() {
                     y: 0,
                   }}
                 >
-                  درخواست شما به صورت نمایشی ثبت شد.
-                  برای فعال‌سازی ارسال واقعی پیام،
-                  بعداً می‌توانیم سرویس فرم یا Backend
-                  اضافه کنیم.
+              پیام شما با موفقیت ثبت شد و ادمین ها به زودی به آن رسیدگی میکنند.
+                </motion.div>
+              )}
+
+              {formStatus === "error" && (
+                <motion.div
+                  className="contact-success-message"
+                  initial={{
+                    opacity: 0,
+                    y: 8,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                >
+                  ذخیره پیام با خطا مواجه شد. دوباره تلاش کنید.
                 </motion.div>
               )}
 
